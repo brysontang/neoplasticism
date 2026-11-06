@@ -1,0 +1,10 @@
+// Deploys neoplasticism.dev as a Cloudflare Worker serving static assets.
+// Workers Builds runs `npm run build`, then `npx wrangler deploy`, which reads this
+// file and uploads dist/. "name" must match the Worker's name in the dashboard.
+{
+  "name": "neoplasticism",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
