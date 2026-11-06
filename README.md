@@ -4,7 +4,7 @@
 
 <h1 align="center">neoplasticism</h1>
 
-<p align="center">A color theme with three colors, after Mondrian.</p>
+<p align="center">A color theme with three colors, after Mondrian.<br><a href="https://neoplasticism.dev">neoplasticism.dev</a></p>
 
 ![The same TypeScript function in neoplasticism (left) and VS Code's default Dark+ theme (right)](assets/preview.png)
 
@@ -49,10 +49,12 @@ Builds every theme and links each one where its app looks, skipping apps you don
 |---|---|
 | Neovim | With lazy.nvim: `{ "brysontang/neoplasticism", lazy = false, priority = 1000 }`, then `vim.cmd.colorscheme("neoplasticism")` |
 | VS Code | Download the `.vsix` from [Releases](https://github.com/brysontang/neoplasticism/releases/latest), then Extensions → ⋯ → Install from VSIX, and pick it in Preferences: Color Theme |
+| Cursor, VSCodium, other forks | Search for Neoplasticism in Extensions (it's on [Open VSX](https://open-vsx.org/extension/brysontang/neoplasticism)) |
 | Ghostty | Save [`dist/ghostty/neoplasticism`](dist/ghostty/neoplasticism) to `~/.config/ghostty/themes/`, then set `theme = neoplasticism` |
 | tmux | Save [`dist/tmux/neoplasticism.conf`](dist/tmux/neoplasticism.conf) and `source-file` it at the end of `tmux.conf`. Needs truecolor: `set -as terminal-features ",xterm*:RGB"` |
 | git | Save [`dist/git/neoplasticism.gitconfig`](dist/git/neoplasticism.gitconfig), then `git config --global --add include.path <where you saved it>` |
 | Blink (iPad) | Settings → Appearance → Themes → Add, with `https://raw.githubusercontent.com/brysontang/neoplasticism/main/dist/blink/neoplasticism.js` |
+| Web pages | [`dist/css/neoplasticism.css`](dist/css/neoplasticism.css) has the palette as `--neo-*` CSS custom properties |
 | Anything else | [`dist/base16/neoplasticism.yaml`](dist/base16/neoplasticism.yaml) works with any [tinted-theming](https://github.com/tinted-theming) builder. base16 gives each color its own meaning (variables are red there), so use it for terminals and UI tools, not editors. |
 
 ## Make it yours

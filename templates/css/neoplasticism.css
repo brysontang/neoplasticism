@@ -1,0 +1,39 @@
+/* {{ meta.slug }} as CSS custom properties, for web pages.
+ * Generated from palette.toml by build.py. Edit templates/css/neoplasticism.css instead.
+ * Prefixed with --neo- so it can sit next to anything else on :root. */
+:root {
+  /* The five */
+  --neo-black: {{ black }};
+  --neo-white: {{ white }};
+  --neo-yellow: {{ yellow }};
+  --neo-blue: {{ blue }};
+  --neo-red: {{ red }};
+
+  /* Shades */
+  --neo-gray1: {{ gray1 }};
+  --neo-line: {{ line }};
+  --neo-inactive: {{ inactive }};
+  --neo-gray2: {{ gray2 }};
+  --neo-gray3: {{ gray3 }};
+  --neo-gray4: {{ gray4 }};
+  --neo-silver: {{ silver }};
+  --neo-green: {{ green }};
+
+  /* Roles: the three that get color */
+  --neo-literal: {{ literal }};
+  --neo-variable: {{ variable }};
+  --neo-function: {{ function }};
+
+  /* Roles: everything else */
+  --neo-bg: {{ bg }};
+  --neo-fg: {{ fg }};
+  --neo-keyword: {{ keyword }};
+  --neo-type: {{ type }};
+  --neo-comment: {{ comment }};
+  --neo-punctuation: {{ punctuation }};
+
+  /* Interface */
+  --neo-accent: {{ accent }};
+  --neo-focus: {{ focus }};
+  --neo-alert: {{ alert }};
+}

@@ -1,21 +1,36 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["shapely"]
+# ///
 """Build the neoplasticism logo as vector art.
+
+    ./build_logo.py [outdir]      (outdir defaults to this folder)
 
 Geometry matches the v6 explorer: three fans 120 degrees apart. Where fans
 overlap, the fan whose line index (u, 0..1 across its base) is higher wins,
 which is the continuous version of the interleaved drawing order in the
 original p5 sketch. The seams between colors get a white band.
+
+Colors come from [colors] in palette.toml, the same five every theme uses.
 """
 import math
 import sys
+from pathlib import Path
 from shapely.geometry import Polygon, box
 from shapely.ops import unary_union
 from shapely import affinity
 
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parents[1]))  # repo root, for build.py
+from build import load_palette  # noqa: E402
+
+_palette = load_palette()
 SZ = 1024.0
 PARAMS = dict(twist=0.0, spread=0.52, reach=1.00, pad=0.08)
-BG = "#030303"
-WHITE = "#ffffff"
-COLS = ["#e9df90", "#8fd0ff", "#ffadb9"]
+BG = _palette["black"]
+WHITE = _palette["white"]
+COLS = [_palette["yellow"], _palette["blue"], _palette["red"]]
 WEDGES = 1600  # thin slices per fan used to build the curved seams
 
 
@@ -132,7 +147,7 @@ def svg(regions, white, with_bg=True, rounded=False):
 
 
 if __name__ == "__main__":
-    outdir = sys.argv[1]
+    outdir = sys.argv[1] if len(sys.argv) > 1 else str(HERE)
     # main mark: seam width 5 at 800px, scaled to 1024
     regions, white = build_fitted(PARAMS, seam_w=5 * SZ / 800)
     open(f"{outdir}/neoplasticism-logo.svg", "w").write(svg(regions, white))

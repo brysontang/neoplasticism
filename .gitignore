@@ -1,2 +1,10 @@
 .DS_Store
 dist/**/*.vsix
+
+.env
+# site
+site/node_modules/
+site/dist/
+site/src/generated/
+site/public/
+__pycache__/
