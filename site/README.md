@@ -12,14 +12,14 @@ Nothing here hard-codes a color. `scripts/prepare.mjs` runs before every dev/bui
 
 The code on the page lives in `src/snippets.js`. Each snippet is a list of frames; scrolling steps through them, and lines with the same text keep their identity across frames, so they slide rather than redraw.
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers Builds)
 
-Connect the GitHub repo once in the Cloudflare dashboard, with:
+The site is a Worker named `neoplasticism` that serves `dist/` as static assets (see `wrangler.jsonc`), connected to the GitHub repo with:
 
 | Setting | Value |
 |---|---|
 | Root directory | `site` |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 
-Node comes from `.node-version`. Every push to `main` redeploys. Add `neoplasticism.dev` under the project's Custom domains.
+Node comes from `.node-version`. Every push to `main` redeploys. `neoplasticism.dev` is attached under the Worker's Settings → Domains & Routes.
