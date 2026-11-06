@@ -1,0 +1,22 @@
+{
+  "name": "{{ meta.slug }}",
+  "displayName": "{{ meta.name }}",
+  "description": "{{ meta.description }}",
+  "version": "{{ meta.version }}",
+  "publisher": "{{ meta.publisher }}",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "{{ meta.name }}",
+        "uiTheme": "vs-dark",
+        "path": "./themes/neoplasticism-color-theme.json"
+      }
+    ]
+  }
+}

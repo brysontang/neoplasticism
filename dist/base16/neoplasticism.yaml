@@ -1,0 +1,32 @@
+# neoplasticism as a base16 scheme (tinted-theming format)
+# Generated from palette.toml by build.py. Edit templates/base16/neoplasticism.yaml instead.
+#
+# For apps nobody writes a template for: feed this to a tinted-theming builder
+# (github.com/tinted-theming) and pick any of its hundreds of app templates.
+#
+# Caveat: base16 slots are hues with their own meanings (base08 "red" means
+# variables there). Fine for terminals and UI tools; for editors use the real
+# templates in this repo, which follow the three-color rule.
+
+system: "base16"
+name: "Neoplasticism"
+slug: "neoplasticism"
+author: "Bryson Tang"
+variant: "dark"
+palette:
+  base00: "#030303"           # default background
+  base01: "#161616"        # lighter background (status bars, line numbers)
+  base02: "#2a2a2a"        # selection background
+  base03: "#7c7c7c"        # comments, invisibles
+  base04: "#d9d9d9"       # dark foreground (status bars)
+  base05: "#ffffff"           # default foreground
+  base06: "#ffffff"           # light foreground
+  base07: "#ffffff"           # lightest foreground
+  base08: "#ffadb9"          # red
+  base09: "#ffd0d6"    # orange (none in the five; the lighter red stands in)
+  base0A: "#e9df90"       # yellow
+  base0B: "#9be39d"        # green
+  base0C: "#5ad1e6"         # cyan
+  base0D: "#8fd0ff"         # blue
+  base0E: "#d35cff"      # magenta
+  base0F: "#e48aff" # deprecated / embedded

@@ -1,0 +1,32 @@
+# {{ meta.slug }} as a base16 scheme (tinted-theming format)
+# Generated from palette.toml by build.py. Edit templates/base16/neoplasticism.yaml instead.
+#
+# For apps nobody writes a template for: feed this to a tinted-theming builder
+# (github.com/tinted-theming) and pick any of its hundreds of app templates.
+#
+# Caveat: base16 slots are hues with their own meanings (base08 "red" means
+# variables there). Fine for terminals and UI tools; for editors use the real
+# templates in this repo, which follow the three-color rule.
+
+system: "base16"
+name: "{{ meta.name }}"
+slug: "{{ meta.slug }}"
+author: "{{ meta.author }}"
+variant: "dark"
+palette:
+  base00: "{{ bg }}"           # default background
+  base01: "{{ gray1 }}"        # lighter background (status bars, line numbers)
+  base02: "{{ gray2 }}"        # selection background
+  base03: "{{ gray4 }}"        # comments, invisibles
+  base04: "{{ silver }}"       # dark foreground (status bars)
+  base05: "{{ fg }}"           # default foreground
+  base06: "{{ fg }}"           # light foreground
+  base07: "{{ fg }}"           # lightest foreground
+  base08: "{{ red }}"          # red
+  base09: "{{ light_red }}"    # orange (none in the five; the lighter red stands in)
+  base0A: "{{ yellow }}"       # yellow
+  base0B: "{{ green }}"        # green
+  base0C: "{{ cyan }}"         # cyan
+  base0D: "{{ blue }}"         # blue
+  base0E: "{{ magenta }}"      # magenta
+  base0F: "{{ light_magenta }}" # deprecated / embedded

@@ -1,0 +1,49 @@
+# neoplasticism for git
+# Generated from palette.toml by build.py. Edit templates/git/neoplasticism.gitconfig instead.
+# ./install.sh links this to ~/.config/git/neoplasticism.gitconfig and adds it to
+# include.path in ~/.gitconfig. Colors are quoted because # starts a comment in git config.
+
+[color]
+	ui = auto
+
+[color "diff"]
+	meta = bold "#ffffff"
+	frag = "#8fd0ff"
+	func = "#8fd0ff"
+	old = "#ffadb9"
+	new = "#9be39d"
+	commit = "#e9df90"
+
+[color "status"]
+	header = "#7c7c7c"
+	branch = "#e9df90"
+	nobranch = "#ffadb9"
+	added = "#9be39d"
+	changed = "#8fd0ff"
+	untracked = "#bcf2bd"
+	unmerged = "#e9df90"
+
+[color "branch"]
+	current = "#e9df90"
+	local = "#ffffff"
+	remote = "#8fd0ff"
+	upstream = "#8fd0ff"
+
+[color "decorate"]
+	HEAD = bold "#ffffff"
+	branch = "#e9df90"
+	remoteBranch = "#8fd0ff"
+	tag = "#ffadb9"
+	stash = "#7c7c7c"
+
+[color "grep"]
+	match = bold "#e9df90"
+	filename = "#8fd0ff"
+	lineNumber = "#4a4a4a"
+	separator = "#4a4a4a"
+
+[color "interactive"]
+	prompt = "#e9df90"
+	header = "#ffffff"
+	help = "#7c7c7c"
+	error = "#ffadb9"

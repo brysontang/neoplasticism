@@ -1,0 +1,49 @@
+# {{ meta.slug }} for git
+# Generated from palette.toml by build.py. Edit templates/git/neoplasticism.gitconfig instead.
+# ./install.sh links this to ~/.config/git/neoplasticism.gitconfig and adds it to
+# include.path in ~/.gitconfig. Colors are quoted because # starts a comment in git config.
+
+[color]
+	ui = auto
+
+[color "diff"]
+	meta = bold "{{ fg }}"
+	frag = "{{ focus }}"
+	func = "{{ function }}"
+	old = "{{ removed }}"
+	new = "{{ added }}"
+	commit = "{{ accent }}"
+
+[color "status"]
+	header = "{{ gray4 }}"
+	branch = "{{ accent }}"
+	nobranch = "{{ alert }}"
+	added = "{{ added }}"
+	changed = "{{ modified }}"
+	untracked = "{{ light_green }}"
+	unmerged = "{{ warning }}"
+
+[color "branch"]
+	current = "{{ accent }}"
+	local = "{{ fg }}"
+	remote = "{{ focus }}"
+	upstream = "{{ focus }}"
+
+[color "decorate"]
+	HEAD = bold "{{ fg }}"
+	branch = "{{ accent }}"
+	remoteBranch = "{{ focus }}"
+	tag = "{{ literal }}"
+	stash = "{{ gray4 }}"
+
+[color "grep"]
+	match = bold "{{ accent }}"
+	filename = "{{ focus }}"
+	lineNumber = "{{ gray3 }}"
+	separator = "{{ gray3 }}"
+
+[color "interactive"]
+	prompt = "{{ accent }}"
+	header = "{{ fg }}"
+	help = "{{ gray4 }}"
+	error = "{{ error }}"

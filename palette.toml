@@ -1,0 +1,104 @@
+# neoplasticism: after Mondrian.
+#
+# The single source of truth. Every theme in dist/ is generated from this file.
+# Edit a color here, run ./build.py (or ./install.sh), and every app follows.
+#
+# Templates refer to names in this file as {{ name }}:
+#   colors, shades, roles   by bare name     {{ yellow }}  {{ gray2 }}  {{ variable }}
+#   terminal slots          with ansi.       {{ ansi.red }}  {{ ansi.bright_red }}
+#   metadata                with meta.       {{ meta.version }}
+# Filters: {{ yellow | rgb }} -> 233, 223, 144     {{ yellow | bare }} -> e9df90
+# Any value below can be a hex color or the name of another color.
+
+[meta]
+name      = "Neoplasticism"
+slug      = "neoplasticism"
+author    = "Bryson Tang"
+publisher = "brysontang"
+version   = "0.3.0"
+# meta.description is generated from [roles] so it never goes stale.
+
+# The five. Mondrian's whole vocabulary: black, white, and three primaries.
+[colors]
+black  = "#030303"
+white  = "#ffffff"
+yellow = "#e9df90"
+blue   = "#8fd0ff"
+red    = "#ffadb9"
+
+# Supporting cast. Grays are the grid lines between the blocks. The rest only
+# appear where a terminal or a diff needs a color the five don't cover.
+[shades]
+gray1    = "#161616" # cursorline, floats, widgets
+line     = "#1c1c1c" # hairline borders, indent guides, terminal black
+inactive = "#1e1e1e" # unfocused selection
+gray2    = "#2a2a2a" # borders, selection
+gray3    = "#4a4a4a" # line numbers
+gray4    = "#7c7c7c" # dim text
+silver   = "#d9d9d9" # sidebar text, terminal white
+
+green   = "#9be39d" # diff added
+magenta = "#d35cff" # terminal only
+cyan    = "#5ad1e6" # terminal only
+
+light_red     = "#ffd0d6"
+light_green   = "#bcf2bd"
+light_yellow  = "#f7eea7"
+light_blue    = "#bfe3ff"
+light_magenta = "#e48aff"
+light_cyan    = "#8ae6f2"
+
+diff_add_bg    = "#0f2a0f"
+diff_delete_bg = "#2e0c0a"
+diff_change_bg = "#111a33"
+diff_text_bg   = "#1f2f66"
+
+# What each color means. Templates use these names, so changing what a color
+# means is one line here.
+[roles]
+bg = "black"
+fg = "white"
+
+# The rule: three things get color.
+variable = "yellow"
+function = "blue"
+literal  = "red"     # strings, numbers, booleans
+
+# Everything else is white: the glue that holds the code together.
+keyword     = "white"
+type        = "white" # rendered italic
+comment     = "white" # rendered italic
+punctuation = "white" # operators, brackets, delimiters
+
+# Interface
+accent = "yellow" # cursor, active tab, badges, search matches
+focus  = "blue"   # focus rings, menu selection, buttons, links
+alert  = "red"    # current search match, debugging, notifications
+
+error    = "red"
+warning  = "yellow"
+info     = "blue"
+hint     = "gray4"
+added    = "green"
+modified = "blue"
+removed  = "red"
+
+# The 16 terminal slots. These name hues, not roles: ansi.red is red because
+# programs printing "red" expect red.
+[ansi]
+black          = "line"
+red            = "red"
+green          = "green"
+yellow         = "yellow"
+blue           = "blue"
+magenta        = "magenta"
+cyan           = "cyan"
+white          = "silver"
+bright_black   = "gray4"
+bright_red     = "light_red"
+bright_green   = "light_green"
+bright_yellow  = "light_yellow"
+bright_blue    = "light_blue"
+bright_magenta = "light_magenta"
+bright_cyan    = "light_cyan"
+bright_white   = "white"

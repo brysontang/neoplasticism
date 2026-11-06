@@ -1,0 +1,28 @@
+# neoplasticism for Ghostty
+# Generated from palette.toml by build.py. Edit templates/ghostty/neoplasticism instead.
+# ./install.sh links this to ~/.config/ghostty/themes/neoplasticism and sets `theme = neoplasticism`.
+
+palette = 0=#1c1c1c
+palette = 1=#ffadb9
+palette = 2=#9be39d
+palette = 3=#e9df90
+palette = 4=#8fd0ff
+palette = 5=#d35cff
+palette = 6=#5ad1e6
+palette = 7=#d9d9d9
+palette = 8=#7c7c7c
+palette = 9=#ffd0d6
+palette = 10=#bcf2bd
+palette = 11=#f7eea7
+palette = 12=#bfe3ff
+palette = 13=#e48aff
+palette = 14=#8ae6f2
+palette = 15=#ffffff
+
+background = #030303
+foreground = #ffffff
+cursor-color = #e9df90
+cursor-text = #030303
+selection-background = #2a2a2a
+selection-foreground = #ffffff
+split-divider-color = #2a2a2a

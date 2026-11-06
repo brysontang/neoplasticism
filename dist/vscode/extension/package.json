@@ -1,0 +1,22 @@
+{
+  "name": "neoplasticism",
+  "displayName": "Neoplasticism",
+  "description": "After Mondrian. Three things get color: variables (yellow), functions (blue), literals (red). Everything else is white.",
+  "version": "0.3.0",
+  "publisher": "brysontang",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Neoplasticism",
+        "uiTheme": "vs-dark",
+        "path": "./themes/neoplasticism-color-theme.json"
+      }
+    ]
+  }
+}
