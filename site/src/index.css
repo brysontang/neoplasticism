@@ -3,6 +3,7 @@
 
 :root {
   color-scheme: dark;
+  --status: 1.625rem;
 }
 
 html,
@@ -16,25 +17,137 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  text-decoration: underline;
-  text-decoration-color: var(--neo-gray3);
-  text-underline-offset: 3px;
+@layer base {
+  a {
+    text-decoration: underline;
+    text-decoration-color: var(--neo-gray3);
+    text-underline-offset: 3px;
+  }
+  a:hover {
+    text-decoration-color: var(--neo-fg);
+  }
 }
-a:hover {
-  text-decoration-color: var(--neo-fg);
+
+main {
+  padding-bottom: var(--status);
+}
+
+@layer components {
+  /* Windows and panes. A window fills the screen above the status line; its panes sit in a
+     grid whose 1px gaps show the gray behind them, like tmux's pane borders. */
+  .window {
+    height: calc(100svh - var(--status));
+    overflow: hidden;
+  }
+  .panes {
+    display: grid;
+    gap: 1px;
+    background: var(--neo-gray2);
+  }
+  .pane {
+    min-width: 0;
+    padding: 2rem 1.25rem 1.5rem;
+    background: var(--neo-bg);
+    container-type: inline-size;
+    transition: background-color 0.7s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .pane-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--neo-gray4);
+  }
+  @media (min-width: 1024px) {
+    .pane {
+      /* Top padding scales with the screen so short laptops keep room for the code. */
+      padding: clamp(2.5rem, 8svh, 5rem) clamp(2.5rem, 4vw, 4.5rem) 2.5rem;
+    }
+    .pane-label {
+      margin-bottom: 2.25rem;
+    }
+  }
+
+  /* The status line: the theme's tmux status bar. */
+  .status {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 10;
+    display: flex;
+    align-items: stretch;
+    height: var(--status);
+    font-size: 12px;
+    background: var(--neo-fg);
+    color: var(--neo-bg);
+  }
+  .status > * {
+    display: flex;
+    align-items: center;
+  }
+  .status a {
+    padding: 0 1ch;
+    text-decoration: none;
+  }
+  .status a[data-on] {
+    background: var(--neo-bg);
+    color: var(--neo-fg);
+  }
+
+  /* Legend: swatch, label, hex, words. Fixed columns so rows line up across both themes. */
+  .legend-row {
+    display: grid;
+    grid-template-columns: 0.75em 1fr;
+    align-items: center;
+    column-gap: 2ch;
+  }
+  .legend-row .words {
+    grid-column: 2; /* narrow screens: words on their own line under the label */
+    overflow: hidden;
+    white-space: pre;
+    text-overflow: ellipsis;
+  }
+  @media (min-width: 640px) {
+    .legend-row {
+      grid-template-columns: 0.75em 25ch 8ch 1fr;
+    }
+    .legend-row .words {
+      grid-column: auto;
+    }
+  }
+  .swatch {
+    width: 0.75em;
+    height: 0.75em;
+  }
 }
 
 /* Code: every token starts white; data-reveal lists which roles get their color.
-   Colors fade in, so a step that adds a role reads as the theme assembling itself. */
+   Colors fade in, so a step that adds a role reads as the theme assembling itself.
+   Size: fit --cols characters across the pane (JetBrains Mono is 0.6em wide). */
 .code {
   font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: clamp(9.5px, min(2.6vw, 2.1svh), 17px);
+  font-size: clamp(var(--min), min(100cqi / (var(--cols) * 0.6), var(--vh, 2.4svh)), var(--max));
   line-height: 1.7;
+}
+.code .line {
+  display: flex;
+}
+.code .ln {
+  flex: none;
+  width: calc(var(--digits) * 1ch);
+  margin-right: 2ch;
+  text-align: right;
+  color: var(--neo-gray3);
+  user-select: none;
+}
+.code .src {
   white-space: pre;
 }
-.code.code-wrap {
+.code.code-wrap .src {
+  min-width: 0;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .code .tok {
   color: var(--neo-fg);
