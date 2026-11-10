@@ -3,9 +3,6 @@
 # ./install.sh links this to ~/.config/git/neoplasticism.gitconfig and adds it to
 # include.path in ~/.gitconfig. Colors are quoted because # starts a comment in git config.
 
-[color]
-	ui = auto
-
 [color "diff"]
 	meta = bold "{{ fg }}"
 	frag = "{{ focus }}"
@@ -21,7 +18,7 @@
 	added = "{{ added }}"
 	changed = "{{ modified }}"
 	untracked = "{{ light_green }}"
-	unmerged = "{{ warning }}"
+	unmerged = "{{ alert }}"
 
 [color "branch"]
 	current = "{{ accent }}"
@@ -39,8 +36,8 @@
 [color "grep"]
 	match = bold "{{ accent }}"
 	filename = "{{ focus }}"
-	lineNumber = "{{ gray3 }}"
-	separator = "{{ gray3 }}"
+	lineNumber = "{{ gray4 }}"
+	separator = "{{ gray4 }}"
 
 [color "interactive"]
 	prompt = "{{ accent }}"

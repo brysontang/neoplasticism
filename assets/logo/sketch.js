@@ -6,10 +6,10 @@
 //        g = toggle white glue grid   s = save PNG
 
 const PAL = {
-  bg: "#030303",
-  y: "#e9df90",
+  bg: "#141414",
+  y: "#e8df95",
   b: "#8fd0ff",
-  r: "#ffadb9",
+  r: "#fdaeba",
   glue: "#ffffff",
 };
 

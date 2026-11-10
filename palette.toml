@@ -7,7 +7,7 @@
 #   colors, shades, roles   by bare name     {{ yellow }}  {{ gray2 }}  {{ variable }}
 #   terminal slots          with ansi.       {{ ansi.red }}  {{ ansi.bright_red }}
 #   metadata                with meta.       {{ meta.version }}
-# Filters: {{ yellow | rgb }} -> 233, 223, 144     {{ yellow | bare }} -> e9df90
+# Filters: {{ yellow | rgb }} -> 232, 223, 149     {{ yellow | bare }} -> e8df95
 # Any value below can be a hex color or the name of another color.
 
 [meta]
@@ -15,43 +15,43 @@ name      = "Neoplasticism"
 slug      = "neoplasticism"
 author    = "Bryson Tang"
 publisher = "brysontang"
-version   = "0.3.0"
+version   = "0.4.0"
 # meta.description is generated from [roles] so it never goes stale.
 
 # The five. Mondrian's whole vocabulary: black, white, and three primaries.
 [colors]
-black  = "#030303"
+black  = "#141414"
 white  = "#ffffff"
-yellow = "#e9df90"
+yellow = "#e8df95"
 blue   = "#8fd0ff"
-red    = "#ffadb9"
+red    = "#fdaeba"
 
 # Supporting cast. Grays are the grid lines between the blocks. The rest only
 # appear where a terminal or a diff needs a color the five don't cover.
 [shades]
-gray1    = "#161616" # cursorline, floats, widgets
-line     = "#1c1c1c" # hairline borders, indent guides, terminal black
-inactive = "#1e1e1e" # unfocused selection
-gray2    = "#2a2a2a" # borders, selection
-gray3    = "#4a4a4a" # line numbers
-gray4    = "#7c7c7c" # dim text
+gray1    = "#212121" # cursorline, floats, widgets
+line     = "#262626" # hairline borders, indent guides, terminal black
+inactive = "#272727" # unfocused selection
+gray2    = "#323232" # borders, selection
+gray3    = "#525252" # line numbers
+gray4    = "#7f7f7f" # dim text
 silver   = "#d9d9d9" # sidebar text, terminal white
 
 green   = "#9be39d" # diff added
 magenta = "#d35cff" # terminal only
-cyan    = "#5ad1e6" # terminal only
+cyan    = "#8ae8e1" # terminal only
 
 light_red     = "#ffd0d6"
 light_green   = "#bcf2bd"
 light_yellow  = "#f7eea7"
 light_blue    = "#bfe3ff"
 light_magenta = "#e48aff"
-light_cyan    = "#8ae6f2"
+light_cyan    = "#b4f3ee"
 
-diff_add_bg    = "#0f2a0f"
-diff_delete_bg = "#2e0c0a"
-diff_change_bg = "#111a33"
-diff_text_bg   = "#1f2f66"
+diff_add_bg    = "#183317"
+diff_delete_bg = "#3a1714"
+diff_change_bg = "#1a243d"
+diff_text_bg   = "#26376e"
 
 # What each color means. Templates use these names, so changing what a color
 # means is one line here.

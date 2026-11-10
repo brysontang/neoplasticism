@@ -4,6 +4,12 @@
   "description": "{{ meta.description }}",
   "version": "{{ meta.version }}",
   "publisher": "{{ meta.publisher }}",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brysontang/neoplasticism.git"
+  },
   "engines": {
     "vscode": "^1.70.0"
   },

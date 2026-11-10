@@ -3,29 +3,29 @@
  * Prefixed with --neo- so it can sit next to anything else on :root. */
 :root {
   /* The five */
-  --neo-black: #030303;
+  --neo-black: #141414;
   --neo-white: #ffffff;
-  --neo-yellow: #e9df90;
+  --neo-yellow: #e8df95;
   --neo-blue: #8fd0ff;
-  --neo-red: #ffadb9;
+  --neo-red: #fdaeba;
 
   /* Shades */
-  --neo-gray1: #161616;
-  --neo-line: #1c1c1c;
-  --neo-inactive: #1e1e1e;
-  --neo-gray2: #2a2a2a;
-  --neo-gray3: #4a4a4a;
-  --neo-gray4: #7c7c7c;
+  --neo-gray1: #212121;
+  --neo-line: #262626;
+  --neo-inactive: #272727;
+  --neo-gray2: #323232;
+  --neo-gray3: #525252;
+  --neo-gray4: #7f7f7f;
   --neo-silver: #d9d9d9;
   --neo-green: #9be39d;
 
   /* Roles: the three that get color */
-  --neo-literal: #ffadb9;
-  --neo-variable: #e9df90;
+  --neo-literal: #fdaeba;
+  --neo-variable: #e8df95;
   --neo-function: #8fd0ff;
 
   /* Roles: everything else */
-  --neo-bg: #030303;
+  --neo-bg: #141414;
   --neo-fg: #ffffff;
   --neo-keyword: #ffffff;
   --neo-type: #ffffff;
@@ -33,7 +33,7 @@
   --neo-punctuation: #ffffff;
 
   /* Interface */
-  --neo-accent: #e9df90;
+  --neo-accent: #e8df95;
   --neo-focus: #8fd0ff;
-  --neo-alert: #ffadb9;
+  --neo-alert: #fdaeba;
 }

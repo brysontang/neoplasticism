@@ -13,6 +13,12 @@
     "icon.foreground": "{{ fg }}",
     "textLink.foreground": "{{ focus }}",
     "textLink.activeForeground": "{{ light_blue }}",
+    "textPreformat.foreground": "{{ focus }}",
+    "textPreformat.background": "{{ gray1 }}",
+    "textCodeBlock.background": "{{ gray1 }}",
+    "textBlockQuote.background": "{{ gray1 }}",
+    "textBlockQuote.border": "{{ gray2 }}",
+    "textSeparator.foreground": "{{ gray2 }}",
     "editor.background": "{{ bg }}",
     "editor.foreground": "{{ fg }}",
     "editorCursor.foreground": "{{ accent }}",
@@ -23,7 +29,7 @@
     "editor.selectionHighlightBackground": "{{ accent }}22",
     "editor.wordHighlightBackground": "{{ accent }}22",
     "editor.wordHighlightStrongBackground": "{{ accent }}33",
-    "editor.findMatchBackground": "{{ accent }}66",
+    "editor.findMatchBackground": "{{ alert }}66",
     "editor.findMatchHighlightBackground": "{{ accent }}33",
     "editorLineNumber.foreground": "{{ gray3 }}",
     "editorLineNumber.activeForeground": "{{ fg }}",
@@ -38,10 +44,26 @@
     "editorBracketHighlight.foreground4": "{{ punctuation }}",
     "editorBracketHighlight.foreground5": "{{ punctuation }}",
     "editorBracketHighlight.foreground6": "{{ punctuation }}",
+    "editorBracketHighlight.unexpectedBracket.foreground": "{{ error }}",
     "editorError.foreground": "{{ error }}",
     "editorWarning.foreground": "{{ warning }}",
     "editorInfo.foreground": "{{ info }}",
     "editorHint.foreground": "{{ hint }}",
+    "editorCodeLens.foreground": "{{ gray4 }}",
+    "editorGhostText.foreground": "{{ gray4 }}",
+    "editorInlayHint.foreground": "{{ gray4 }}",
+    "editorInlayHint.background": "{{ gray1 }}",
+    "editorLightBulb.foreground": "{{ accent }}",
+    "editorLink.activeForeground": "{{ focus }}",
+    "editorRuler.foreground": "{{ line }}",
+    "editorOverviewRuler.border": "{{ line }}",
+    "editorOverviewRuler.errorForeground": "{{ error }}",
+    "editorOverviewRuler.warningForeground": "{{ warning }}",
+    "editorOverviewRuler.infoForeground": "{{ info }}",
+    "editorOverviewRuler.findMatchForeground": "{{ accent }}",
+    "editorOverviewRuler.addedForeground": "{{ added }}",
+    "editorOverviewRuler.modifiedForeground": "{{ modified }}",
+    "editorOverviewRuler.deletedForeground": "{{ removed }}",
     "editorGutter.addedBackground": "{{ added }}",
     "editorGutter.modifiedBackground": "{{ modified }}",
     "editorGutter.deletedBackground": "{{ removed }}",
@@ -52,13 +74,35 @@
     "editorSuggestWidget.selectedBackground": "{{ focus }}",
     "editorSuggestWidget.selectedForeground": "{{ bg }}",
     "editorSuggestWidget.highlightForeground": "{{ accent }}",
+    "editorSuggestWidget.focusHighlightForeground": "{{ bg }}",
+    "editorSuggestWidget.selectedIconForeground": "{{ bg }}",
     "editorHoverWidget.background": "{{ gray1 }}",
     "editorHoverWidget.border": "{{ gray2 }}",
+    "peekView.border": "{{ focus }}",
+    "peekViewEditor.background": "{{ gray1 }}",
+    "peekViewEditorGutter.background": "{{ gray1 }}",
+    "peekViewEditor.matchHighlightBackground": "{{ accent }}33",
+    "peekViewResult.background": "{{ gray1 }}",
+    "peekViewResult.fileForeground": "{{ fg }}",
+    "peekViewResult.lineForeground": "{{ silver }}",
+    "peekViewResult.matchHighlightBackground": "{{ accent }}33",
+    "peekViewResult.selectionBackground": "{{ gray2 }}",
+    "peekViewResult.selectionForeground": "{{ fg }}",
+    "peekViewTitle.background": "{{ gray1 }}",
+    "peekViewTitleLabel.foreground": "{{ fg }}",
+    "peekViewTitleDescription.foreground": "{{ gray4 }}",
     "editorGroupHeader.tabsBackground": "{{ bg }}",
     "editorGroup.border": "{{ gray2 }}",
     "diffEditor.insertedTextBackground": "{{ added }}22",
     "diffEditor.removedTextBackground": "{{ removed }}22",
     "minimap.background": "{{ bg }}",
+    "minimap.findMatchHighlight": "{{ accent }}",
+    "minimap.selectionHighlight": "{{ gray3 }}",
+    "minimap.errorHighlight": "{{ error }}",
+    "minimap.warningHighlight": "{{ warning }}",
+    "minimapGutter.addedBackground": "{{ added }}",
+    "minimapGutter.modifiedBackground": "{{ modified }}",
+    "minimapGutter.deletedBackground": "{{ removed }}",
     "scrollbarSlider.background": "{{ fg }}1a",
     "scrollbarSlider.hoverBackground": "{{ fg }}2e",
     "scrollbarSlider.activeBackground": "{{ fg }}44",
@@ -75,7 +119,7 @@
     "titleBar.border": "{{ line }}",
     "activityBar.background": "{{ bg }}",
     "activityBar.foreground": "{{ fg }}",
-    "activityBar.inactiveForeground": "{{ gray3 }}",
+    "activityBar.inactiveForeground": "{{ gray4 }}",
     "activityBar.activeBorder": "{{ accent }}",
     "activityBar.border": "{{ line }}",
     "activityBarBadge.background": "{{ alert }}",
@@ -90,11 +134,23 @@
     "list.activeSelectionBackground": "{{ gray2 }}",
     "list.activeSelectionForeground": "{{ fg }}",
     "list.inactiveSelectionBackground": "{{ line }}",
+    "list.inactiveSelectionForeground": "{{ fg }}",
+    "list.focusBackground": "{{ gray2 }}",
+    "list.focusForeground": "{{ fg }}",
     "list.hoverBackground": "{{ gray1 }}",
     "list.focusOutline": "{{ focus }}",
     "list.highlightForeground": "{{ accent }}",
+    "list.focusHighlightForeground": "{{ accent }}",
+    "list.deemphasizedForeground": "{{ gray4 }}",
+    "list.invalidItemForeground": "{{ error }}",
     "list.errorForeground": "{{ error }}",
     "list.warningForeground": "{{ warning }}",
+    "tree.indentGuidesStroke": "{{ gray2 }}",
+    "breadcrumb.background": "{{ bg }}",
+    "breadcrumb.foreground": "{{ gray4 }}",
+    "breadcrumb.focusForeground": "{{ fg }}",
+    "breadcrumb.activeSelectionForeground": "{{ fg }}",
+    "breadcrumbPicker.background": "{{ gray1 }}",
     "statusBar.background": "{{ fg }}",
     "statusBar.foreground": "{{ bg }}",
     "statusBar.border": "{{ fg }}",
@@ -113,6 +169,18 @@
     "input.foreground": "{{ fg }}",
     "input.border": "{{ gray2 }}",
     "input.placeholderForeground": "{{ gray4 }}",
+    "inputOption.activeBackground": "{{ gray2 }}",
+    "inputOption.activeBorder": "{{ focus }}",
+    "inputOption.activeForeground": "{{ fg }}",
+    "inputValidation.errorBackground": "{{ gray1 }}",
+    "inputValidation.errorBorder": "{{ error }}",
+    "inputValidation.errorForeground": "{{ fg }}",
+    "inputValidation.warningBackground": "{{ gray1 }}",
+    "inputValidation.warningBorder": "{{ warning }}",
+    "inputValidation.warningForeground": "{{ fg }}",
+    "inputValidation.infoBackground": "{{ gray1 }}",
+    "inputValidation.infoBorder": "{{ info }}",
+    "inputValidation.infoForeground": "{{ fg }}",
     "dropdown.background": "{{ gray1 }}",
     "dropdown.border": "{{ gray2 }}",
     "button.background": "{{ focus }}",
@@ -131,12 +199,52 @@
     "menu.selectionForeground": "{{ bg }}",
     "notifications.background": "{{ gray1 }}",
     "notifications.border": "{{ gray2 }}",
+    "notificationLink.foreground": "{{ focus }}",
+    "notificationsErrorIcon.foreground": "{{ error }}",
+    "notificationsWarningIcon.foreground": "{{ warning }}",
+    "notificationsInfoIcon.foreground": "{{ info }}",
+    "problemsErrorIcon.foreground": "{{ error }}",
+    "problemsWarningIcon.foreground": "{{ warning }}",
+    "problemsInfoIcon.foreground": "{{ info }}",
     "gitDecoration.addedResourceForeground": "{{ added }}",
     "gitDecoration.modifiedResourceForeground": "{{ modified }}",
     "gitDecoration.deletedResourceForeground": "{{ removed }}",
     "gitDecoration.untrackedResourceForeground": "{{ light_green }}",
-    "gitDecoration.ignoredResourceForeground": "{{ gray3 }}",
+    "gitDecoration.ignoredResourceForeground": "{{ gray4 }}",
     "gitDecoration.conflictingResourceForeground": "{{ warning }}",
+    "symbolIcon.arrayForeground": "{{ fg }}",
+    "symbolIcon.booleanForeground": "{{ literal }}",
+    "symbolIcon.classForeground": "{{ fg }}",
+    "symbolIcon.colorForeground": "{{ literal }}",
+    "symbolIcon.constantForeground": "{{ variable }}",
+    "symbolIcon.constructorForeground": "{{ function }}",
+    "symbolIcon.enumeratorForeground": "{{ fg }}",
+    "symbolIcon.enumeratorMemberForeground": "{{ variable }}",
+    "symbolIcon.eventForeground": "{{ function }}",
+    "symbolIcon.fieldForeground": "{{ variable }}",
+    "symbolIcon.fileForeground": "{{ fg }}",
+    "symbolIcon.folderForeground": "{{ fg }}",
+    "symbolIcon.functionForeground": "{{ function }}",
+    "symbolIcon.interfaceForeground": "{{ fg }}",
+    "symbolIcon.keyForeground": "{{ variable }}",
+    "symbolIcon.keywordForeground": "{{ fg }}",
+    "symbolIcon.methodForeground": "{{ function }}",
+    "symbolIcon.moduleForeground": "{{ fg }}",
+    "symbolIcon.namespaceForeground": "{{ fg }}",
+    "symbolIcon.nullForeground": "{{ literal }}",
+    "symbolIcon.numberForeground": "{{ literal }}",
+    "symbolIcon.objectForeground": "{{ fg }}",
+    "symbolIcon.operatorForeground": "{{ fg }}",
+    "symbolIcon.packageForeground": "{{ fg }}",
+    "symbolIcon.propertyForeground": "{{ variable }}",
+    "symbolIcon.referenceForeground": "{{ variable }}",
+    "symbolIcon.snippetForeground": "{{ fg }}",
+    "symbolIcon.stringForeground": "{{ literal }}",
+    "symbolIcon.structForeground": "{{ fg }}",
+    "symbolIcon.textForeground": "{{ fg }}",
+    "symbolIcon.typeParameterForeground": "{{ fg }}",
+    "symbolIcon.unitForeground": "{{ literal }}",
+    "symbolIcon.variableForeground": "{{ variable }}",
     "terminal.background": "{{ bg }}",
     "terminal.foreground": "{{ fg }}",
     "terminalCursor.foreground": "{{ accent }}",
@@ -175,17 +283,13 @@
       "foreground": "{{ variable }}",
       "bold": false
     },
-    "variable.defaultLibrary": {
-      "foreground": "{{ variable }}",
-      "italic": true,
-      "bold": false
-    },
     "property": {
       "foreground": "{{ variable }}",
       "bold": false
     },
     "enumMember": {
-      "foreground": "{{ literal }}"
+      "foreground": "{{ variable }}",
+      "bold": false
     },
     "function": {
       "foreground": "{{ function }}",
@@ -200,6 +304,14 @@
       "bold": false
     },
     "method.declaration": {
+      "foreground": "{{ function }}",
+      "bold": false
+    },
+    "decorator": {
+      "foreground": "{{ function }}",
+      "bold": false
+    },
+    "macro": {
       "foreground": "{{ function }}",
       "bold": false
     },
@@ -262,8 +374,7 @@
         "storage.type",
         "storage.modifier",
         "keyword.other",
-        "variable.language.this",
-        "variable.language.self"
+        "keyword.type.go"
       ],
       "settings": {
         "foreground": "{{ keyword }}",
@@ -291,7 +402,11 @@
         "variable.other.readwrite",
         "variable.parameter",
         "variable.other.constant",
-        "constant.other.caps"
+        "constant.other.caps",
+        "variable.language",
+        "support.variable",
+        "support.constant",
+        "entity.name.variable"
       ],
       "settings": {
         "foreground": "{{ variable }}",
@@ -345,7 +460,10 @@
         "meta.function-call.generic",
         "support.function",
         "meta.method-call entity.name.function",
-        "entity.name.function.call"
+        "entity.name.function.call",
+        "meta.decorator variable.other.readwrite",
+        "storage.type.annotation",
+        "meta.attribute.rust"
       ],
       "settings": {
         "foreground": "{{ function }}",
@@ -361,7 +479,22 @@
         "support.class",
         "entity.other.inherited-class",
         "storage.type.primitive",
-        "entity.name.namespace"
+        "entity.name.namespace",
+        "storage.type.built-in",
+        "storage.type.java",
+        "storage.type.generic",
+        "storage.type.sql",
+        "storage.type.numeric.go",
+        "storage.type.boolean.go",
+        "storage.type.string.go",
+        "storage.type.error.go",
+        "storage.type.rune.go",
+        "storage.type.byte.go",
+        "storage.type.uintptr.go",
+        "keyword.type",
+        "keyword.other.type",
+        "new.expr meta.function-call entity.name.function",
+        "variable.language.generic-parameter"
       ],
       "settings": {
         "foreground": "{{ type }}",
@@ -399,6 +532,70 @@
       }
     },
     {
+      "name": "Keys and other names",
+      "scope": [
+        "support.type.property-name",
+        "punctuation.support.type.property-name",
+        "entity.name.tag.yaml",
+        "entity.other.attribute.lua",
+        "constant.language.symbol.hashkey",
+        "constant.other.symbol.hashkey",
+        "constant.other.php",
+        "constant.other.class.php",
+        "constant.other.database-name",
+        "constant.other.table-name",
+        "punctuation.definition.variable",
+        "entity.name.type.anchor",
+        "entity.name.class.lua",
+        "meta.create.sql entity.name.function",
+        "entity.name.section.toml"
+      ],
+      "settings": {
+        "foreground": "{{ variable }}",
+        "fontStyle": ""
+      }
+    },
+    {
+      "name": "Parts of a literal",
+      "scope": [
+        "storage.type.numeric.bigint",
+        "storage.type.number.python",
+        "storage.type.string.python",
+        "keyword.other.unit",
+        "constant.numeric punctuation",
+        "punctuation.definition.constant",
+        "punctuation.definition.char",
+        "constant.character.entity punctuation.definition.entity",
+        "string.regexp keyword.operator",
+        "string.regexp keyword.control",
+        "string.regexp keyword.other",
+        "string.regexp punctuation",
+        "string.regexp punctuation.definition",
+        "source.css support.constant",
+        "variable.parameter.url"
+      ],
+      "settings": {
+        "foreground": "{{ literal }}",
+        "fontStyle": ""
+      }
+    },
+    {
+      "name": "Code inside a string, prose inside markup",
+      "scope": [
+        "meta.embedded",
+        "meta.template.expression",
+        "meta.interpolation",
+        "meta.fstring constant.character.format",
+        "constant.other.symbol.hashkey punctuation.definition.constant",
+        "punctuation.definition.constant.hashkey",
+        "string.other.link.title"
+      ],
+      "settings": {
+        "foreground": "{{ fg }}",
+        "fontStyle": ""
+      }
+    },
+    {
       "name": "Markup",
       "scope": [
         "markup.heading",
@@ -431,7 +628,6 @@
       "name": "Markup code and links",
       "scope": [
         "markup.inline.raw",
-        "markup.fenced_code",
         "markup.underline.link"
       ],
       "settings": {
@@ -452,7 +648,8 @@
     {
       "name": "Diff",
       "scope": [
-        "markup.inserted"
+        "markup.inserted",
+        "punctuation.definition.inserted"
       ],
       "settings": {
         "foreground": "{{ added }}"
@@ -461,7 +658,8 @@
     {
       "name": "Diff removed",
       "scope": [
-        "markup.deleted"
+        "markup.deleted",
+        "punctuation.definition.deleted"
       ],
       "settings": {
         "foreground": "{{ removed }}"

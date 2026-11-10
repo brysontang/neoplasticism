@@ -2,8 +2,14 @@
   "name": "neoplasticism",
   "displayName": "Neoplasticism",
   "description": "After Mondrian. Three things get color: variables (yellow), functions (blue), literals (red). Everything else is white.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "brysontang",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brysontang/neoplasticism.git"
+  },
   "engines": {
     "vscode": "^1.70.0"
   },

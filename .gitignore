@@ -8,3 +8,4 @@ site/dist/
 site/src/generated/
 site/public/
 __pycache__/
+.build-*/

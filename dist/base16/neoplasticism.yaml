@@ -14,19 +14,19 @@ slug: "neoplasticism"
 author: "Bryson Tang"
 variant: "dark"
 palette:
-  base00: "#030303"           # default background
-  base01: "#161616"        # lighter background (status bars, line numbers)
-  base02: "#2a2a2a"        # selection background
-  base03: "#7c7c7c"        # comments, invisibles
+  base00: "#141414"           # default background
+  base01: "#212121"        # lighter background (status bars, line numbers)
+  base02: "#323232"        # selection background
+  base03: "#7f7f7f"        # comments, invisibles
   base04: "#d9d9d9"       # dark foreground (status bars)
   base05: "#ffffff"           # default foreground
   base06: "#ffffff"           # light foreground
   base07: "#ffffff"           # lightest foreground
-  base08: "#ffadb9"          # red
+  base08: "#fdaeba"          # red
   base09: "#ffd0d6"    # orange (none in the five; the lighter red stands in)
-  base0A: "#e9df90"       # yellow
+  base0A: "#e8df95"       # yellow
   base0B: "#9be39d"        # green
-  base0C: "#5ad1e6"         # cyan
+  base0C: "#8ae8e1"         # cyan
   base0D: "#8fd0ff"         # blue
   base0E: "#d35cff"      # magenta
   base0F: "#e48aff" # deprecated / embedded

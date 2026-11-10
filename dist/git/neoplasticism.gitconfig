@@ -3,47 +3,44 @@
 # ./install.sh links this to ~/.config/git/neoplasticism.gitconfig and adds it to
 # include.path in ~/.gitconfig. Colors are quoted because # starts a comment in git config.
 
-[color]
-	ui = auto
-
 [color "diff"]
 	meta = bold "#ffffff"
 	frag = "#8fd0ff"
 	func = "#8fd0ff"
-	old = "#ffadb9"
+	old = "#fdaeba"
 	new = "#9be39d"
-	commit = "#e9df90"
+	commit = "#e8df95"
 
 [color "status"]
-	header = "#7c7c7c"
-	branch = "#e9df90"
-	nobranch = "#ffadb9"
+	header = "#7f7f7f"
+	branch = "#e8df95"
+	nobranch = "#fdaeba"
 	added = "#9be39d"
 	changed = "#8fd0ff"
 	untracked = "#bcf2bd"
-	unmerged = "#e9df90"
+	unmerged = "#fdaeba"
 
 [color "branch"]
-	current = "#e9df90"
+	current = "#e8df95"
 	local = "#ffffff"
 	remote = "#8fd0ff"
 	upstream = "#8fd0ff"
 
 [color "decorate"]
 	HEAD = bold "#ffffff"
-	branch = "#e9df90"
+	branch = "#e8df95"
 	remoteBranch = "#8fd0ff"
-	tag = "#ffadb9"
-	stash = "#7c7c7c"
+	tag = "#fdaeba"
+	stash = "#7f7f7f"
 
 [color "grep"]
-	match = bold "#e9df90"
+	match = bold "#e8df95"
 	filename = "#8fd0ff"
-	lineNumber = "#4a4a4a"
-	separator = "#4a4a4a"
+	lineNumber = "#7f7f7f"
+	separator = "#7f7f7f"
 
 [color "interactive"]
-	prompt = "#e9df90"
+	prompt = "#e8df95"
 	header = "#ffffff"
-	help = "#7c7c7c"
-	error = "#ffadb9"
+	help = "#7f7f7f"
+	error = "#fdaeba"
