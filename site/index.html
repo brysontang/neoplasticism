@@ -5,12 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>neoplasticism</title>
     <meta name="description" content="A color theme made for humans to parse instead of compilers. Three colors: literals, names, functions. Everything else is white." />
-    <meta name="theme-color" content="#030303" />
+    <meta name="theme-color" content="%NEO_BG%" />
+    <link rel="canonical" href="https://neoplasticism.dev/" />
+    <meta property="og:type" content="website" />
     <meta property="og:title" content="neoplasticism" />
     <meta property="og:description" content="A theme made for humans to parse instead of compilers." />
+    <meta property="og:url" content="https://neoplasticism.dev/" />
     <meta property="og:image" content="https://neoplasticism.dev/preview.png" />
-    <meta property="og:url" content="https://neoplasticism.dev" />
+    <meta property="og:image:width" content="2908" />
+    <meta property="og:image:height" content="1434" />
+    <meta property="og:image:alt" content="The same TypeScript function twice: in neoplasticism, with three colors on black, and in VS Code Dark+, with a color for every kind of token." />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="neoplasticism" />
+    <meta name="twitter:description" content="A theme made for humans to parse instead of compilers." />
+    <meta name="twitter:image" content="https://neoplasticism.dev/preview.png" />
+    <meta name="twitter:image:alt" content="The same TypeScript function twice: in neoplasticism, with three colors on black, and in VS Code Dark+, with a color for every kind of token." />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,7 +27,28 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- What is here before (or without) JavaScript: the name, the pitch, and where to get
+         it. React replaces everything inside #root when it mounts, so this is laid out
+         like the first pane to keep the swap from jumping. -->
+    <div id="root">
+      <main class="pane">
+        <div class="flex items-center gap-4">
+          <img src="/logo.png" alt="" width="48" height="48" class="h-10 w-10 lg:h-12 lg:w-12" />
+          <h1 class="text-[clamp(1.5rem,8.2vw,2.25rem)] leading-[1.111] tracking-tight lg:text-5xl lg:leading-none">neoplasticism</h1>
+        </div>
+        <p class="mt-6 max-w-[30ch] text-lg leading-relaxed text-(--neo-silver) lg:text-2xl lg:leading-relaxed">
+          A theme made for humans to parse instead of compilers.
+        </p>
+        <noscript>
+          <p class="mt-6 max-w-[60ch] text-sm leading-relaxed text-(--neo-silver)">
+            Three colors: red for literals, yellow for names, blue for functions. Everything else is white. The
+            walkthrough on this page needs JavaScript; the theme does not. It is on
+            <a href="https://github.com/brysontang/neoplasticism">GitHub</a> (VS Code, Neovim, Ghostty, tmux, git) and
+            <a href="https://open-vsx.org/extension/brysontang/neoplasticism">Open VSX</a>.
+          </p>
+        </noscript>
+      </main>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

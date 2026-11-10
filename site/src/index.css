@@ -1,9 +1,23 @@
 @import "tailwindcss";
 @import "./generated/palette.css";
 
+/* Two columns of panes: wide screens, and phones on their side, where a stacked window
+   would not fit the height. Type sizes still follow lg:, so a sideways phone keeps the
+   small ones. */
+@custom-variant cols {
+  @media (min-width: 1024px), (min-width: 640px) and (max-height: 540px) {
+    @slot;
+  }
+}
+
 :root {
   color-scheme: dark;
   --status: 1.625rem;
+}
+
+html {
+  /* Keep anything scrolled into view (focus, find-in-page) clear of the status line. */
+  scroll-padding-bottom: var(--status);
 }
 
 html,
@@ -20,11 +34,15 @@ body {
 @layer base {
   a {
     text-decoration: underline;
-    text-decoration-color: var(--neo-gray3);
+    text-decoration-color: var(--neo-gray4);
     text-underline-offset: 3px;
   }
   a:hover {
     text-decoration-color: var(--neo-fg);
+  }
+  a:focus-visible {
+    outline: 2px solid var(--neo-focus);
+    outline-offset: 2px;
   }
 }
 
@@ -45,6 +63,7 @@ main {
     background: var(--neo-gray2);
   }
   .pane {
+    --label-gap: 1.5rem;
     min-width: 0;
     padding: 2rem 1.25rem 1.5rem;
     background: var(--neo-bg);
@@ -55,19 +74,89 @@ main {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--label-gap);
     font-size: 12px;
     line-height: 1;
-    color: var(--neo-gray4);
+    /* --pane-label: a pane on someone else's background (Dark+) sets a readable one. */
+    color: var(--pane-label, var(--neo-gray4));
+    transition: color 0.7s cubic-bezier(0.2, 0, 0, 1);
   }
   @media (min-width: 1024px) {
     .pane {
+      --label-gap: 2.25rem;
       /* Top padding scales with the screen so short laptops keep room for the code. */
       padding: clamp(2.5rem, 8svh, 5rem) clamp(2.5rem, 4vw, 4.5rem) 2.5rem;
     }
-    .pane-label {
-      margin-bottom: 2.25rem;
+  }
+
+  /* Inside a pinned window nothing can grow, so on a short screen the panes give up
+     their breathing room first, in two steps. */
+  @media (max-height: 700px) {
+    .window .pane {
+      --label-gap: 1rem;
+      padding-block: 1.25rem 1rem;
     }
+  }
+  @media (max-height: 540px) {
+    .window .pane {
+      --label-gap: 0.75rem;
+      padding-block: 0.75rem;
+    }
+  }
+  /* A pane whose content may be taller than its share of the window scrolls rather than
+     being cut off. The last resort, for screens shorter than the steps above cover. */
+  .pane-scroll {
+    min-height: 0;
+    overflow-y: auto;
+  }
+  /* A pane that takes whatever height is left and sizes its code to fit it: a size
+     container, so the code can measure the pane (100cqb) and not just the screen. */
+  .pane-fill {
+    min-height: 0;
+    overflow-y: auto;
+    container-type: size;
+  }
+  .pane-fill .code {
+    --vh: calc((100cqb - 12px - var(--label-gap)) / (var(--rows) * 1.7));
+  }
+
+  /* The captions, as a log. A flex column so the ones not shown yet (sr-only, out of
+     flow) leave no gap behind. */
+  .log {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 3.25em;
+    font-size: 1rem;
+    line-height: 1.625;
+  }
+  @media (min-width: 1024px) {
+    .log {
+      gap: 1.5rem;
+      font-size: 1.25rem;
+    }
+  }
+  @media (max-height: 700px) {
+    .log {
+      gap: 0.75rem;
+    }
+  }
+  @media (min-width: 1024px) and (max-height: 700px) {
+    .log {
+      font-size: 1.125rem;
+    }
+  }
+  @media (max-height: 540px) {
+    .log {
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+  }
+
+  /* The two renderings of the colors snippet, stacked in one grid cell and crossfaded. */
+  .xfade {
+    grid-area: 1 / 1;
+    transition: opacity 0.7s cubic-bezier(0.2, 0, 0, 1);
   }
 
   /* The status line: the theme's tmux status bar. */
@@ -87,6 +176,8 @@ main {
     align-items: center;
   }
   .status a {
+    justify-content: center;
+    min-width: 24px; /* a tap target, even when only the number shows */
     padding: 0 1ch;
     text-decoration: none;
   }
@@ -94,26 +185,66 @@ main {
     background: var(--neo-bg);
     color: var(--neo-fg);
   }
+  /* Focus rings sit inside the bar: black on the white bar, the focus blue on the
+     inverted current window. */
+  .status a:focus-visible {
+    outline: 2px solid var(--neo-bg);
+    outline-offset: -2px;
+  }
+  .status a[data-on]:focus-visible {
+    outline-color: var(--neo-focus);
+  }
 
-  /* Legend: swatch, label, hex, words. Fixed columns so rows line up across both themes. */
+  /* Legend: swatch, label, hex, words, one line per color. In a narrow pane the hex goes
+     and the label column is as wide as the longest label (--label, in characters); in a
+     wide one the columns are fixed so rows line up across both themes. */
+  .legend {
+    display: grid;
+    row-gap: 0.625rem;
+    font-size: 12px;
+    line-height: 1.34;
+  }
   .legend-row {
     display: grid;
-    grid-template-columns: 0.75em 1fr;
+    grid-template-columns: 0.75em minmax(0, calc(var(--label, 25) * 1ch)) minmax(0, 1fr);
     align-items: center;
     column-gap: 2ch;
+    white-space: nowrap;
   }
+  .legend-row .label,
   .legend-row .words {
-    grid-column: 2; /* narrow screens: words on their own line under the label */
     overflow: hidden;
-    white-space: pre;
     text-overflow: ellipsis;
   }
-  @media (min-width: 640px) {
+  .legend-row .words {
+    white-space: pre;
+  }
+  .legend-row .hex {
+    display: none;
+  }
+  @container (min-width: 520px) {
     .legend-row {
-      grid-template-columns: 0.75em 25ch 8ch 1fr;
+      grid-template-columns: 0.75em 25ch 8ch minmax(0, 1fr);
     }
-    .legend-row .words {
-      grid-column: auto;
+    .legend-row .hex {
+      display: inline;
+    }
+  }
+  @media (min-width: 1024px) {
+    .legend {
+      row-gap: 0.875rem;
+      font-size: 13px;
+    }
+  }
+  @media (max-height: 700px) {
+    .legend {
+      row-gap: 0.5rem;
+    }
+  }
+  @media (max-height: 540px) {
+    .legend {
+      row-gap: 0.25rem;
+      font-size: 12px;
     }
   }
   .swatch {
@@ -172,8 +303,13 @@ main {
   opacity: 0.22;
 }
 
+/* Reduced motion: steps cut instead of fading. (Motion's own animations do the same:
+   <MotionConfig reducedMotion="user"> and useFade in App.jsx.) */
 @media (prefers-reduced-motion: reduce) {
-  .code .tok {
+  .code .tok,
+  .pane,
+  .pane-label,
+  .xfade {
     transition: none;
   }
 }

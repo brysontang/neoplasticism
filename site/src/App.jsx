@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useCallback, useEffect, useId, useState } from "react";
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
 import tokens from "./generated/tokens.json";
 import palette from "./generated/palette.json";
 import { ALL_ROLES, Code, measure } from "./Code.jsx";
@@ -8,7 +8,7 @@ import { Scrolly } from "./Scrolly.jsx";
 const REPO = "https://github.com/brysontang/neoplasticism";
 const OPEN_VSX = "https://open-vsx.org/extension/brysontang/neoplasticism";
 
-// Captions: [r:...] red, [y:...] yellow, [b:...] blue, [g:...] gray.
+// Captions: [r:...] red, [y:...] yellow, [b:...] blue.
 // Window 2: one snippet, the colors switch on one role at a time.
 const COLOR_STEPS = [
   { reveal: [], text: "Code, uncolored." },
@@ -53,6 +53,15 @@ export default function App() {
     return () => io.disconnect();
   }, []);
 
+  // A link to #levels arrives before there is a #levels: the page is empty until React
+  // mounts, so the browser's own jump finds nothing. Do it once, now that the target
+  // exists. Not on reload or back/forward, where the browser restores the scroll itself.
+  useEffect(() => {
+    const type = performance.getEntriesByType("navigation")[0]?.type;
+    if (location.hash.length < 2 || type === "reload" || type === "back_forward") return;
+    document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+  }, []);
+
   const progress =
     current === "colors"
       ? `${steps.colors + 1}/${COLOR_STEPS.length}`
@@ -61,29 +70,34 @@ export default function App() {
         : "";
 
   return (
-    <>
+    // reducedMotion="user": with "reduce motion" on, Motion drops movement and layout
+    // animation and keeps the fades. index.css does the same for the CSS transitions.
+    <MotionConfig reducedMotion="user">
       <main>
         <Intro />
-        <Scrolly id="colors" steps={COLOR_STEPS.length} onStep={onColors}>
+        <Scrolly id="colors" title="Three colors" steps={COLOR_STEPS.length} onStep={onColors}>
           {(step) => <ColorsWindow step={step} />}
         </Scrolly>
-        <Scrolly id="levels" steps={LEVEL_STEPS.length} per={110} onStep={onLevels}>
+        <Scrolly id="levels" title="One level per function" steps={LEVEL_STEPS.length} per={110} onStep={onLevels}>
           {(step) => <LevelsWindow step={step} />}
         </Scrolly>
         <Install />
       </main>
       <StatusLine current={current} progress={progress} />
-    </>
+    </MotionConfig>
   );
 }
 
 // A pane: one cell of a window. Panes sit in a grid with a 1px gap over a gray
 // background, so the gaps are the lines between them and every line reaches the edge.
+// A labeled pane is a group named by its label, so "prices.ts, Dark+" is announced
+// before the code it holds.
 function Pane({ label, aside, className = "", style, children }) {
+  const id = useId();
   return (
-    <div className={`pane ${className}`} style={style}>
+    <div className={`pane ${className}`} style={style} role={label ? "group" : undefined} aria-labelledby={label ? id : undefined}>
       {label && (
-        <div className="pane-label">
+        <div id={id} className="pane-label">
           <span>{label}</span>
           {aside && <span>{aside}</span>}
         </div>
@@ -103,7 +117,7 @@ function Intro() {
       <Pane>
         <div className="flex items-center gap-4">
           <img src="/logo.png" alt="" aria-hidden="true" width="48" height="48" className="h-10 w-10 lg:h-12 lg:w-12" />
-          <h1 className="text-4xl tracking-tight lg:text-5xl">neoplasticism</h1>
+          <h1 className="text-[clamp(1.5rem,8.2vw,2.25rem)] leading-[1.111] tracking-tight lg:text-5xl lg:leading-none">neoplasticism</h1>
         </div>
         <p className="mt-6 max-w-[30ch] text-lg leading-relaxed text-(--neo-silver) lg:text-2xl lg:leading-relaxed">
           A theme made for humans to parse instead of compilers.
@@ -129,33 +143,38 @@ function Intro() {
   );
 }
 
+// The pane label on the Dark+ background, where the usual gray is under 4.5:1.
+const DARK_LABEL = "color-mix(in srgb, var(--neo-gray4), var(--neo-fg) 25%)";
+
 function ColorsWindow({ step }) {
   const s = COLOR_STEPS[step];
   const rows = s.parser ? darkRows() : neoRows(tokens.colors[0], s.reveal);
   return (
-    <div className="panes h-full grid-rows-[auto_auto_1fr] lg:grid-cols-[38fr_62fr] lg:grid-rows-[1fr_26rem]">
-      <Pane label="colors" className="lg:row-span-2">
+    // Rows. Stacked: captions and code take what they need, the legend gets the rest.
+    // In columns: the legend keeps a fixed 26rem (so the split does not move as rows are
+    // added) until the screen is too short for that, then the code keeps its height and
+    // the legend gets what is left.
+    <div className="panes h-full grid-rows-[auto_auto_minmax(0,1fr)] cols:grid-cols-[38fr_62fr] cols:grid-rows-[1fr_minmax(auto,26rem)]">
+      <Pane label="colors" className="pane-scroll cols:row-span-2">
         <Log steps={COLOR_STEPS} step={step} />
       </Pane>
       <Pane
         label="prices.ts"
         aside={s.parser ? "Dark+" : "neoplasticism"}
-        style={{ background: s.parser ? tokens.meta.darkBg : undefined }}
+        style={s.parser ? { background: tokens.meta.darkBg, "--pane-label": DARK_LABEL } : undefined}
       >
+        {/* Both renderings stay mounted so the crossfade has two ends; the one that is
+            faded out is inert, so it is neither read twice nor selectable. */}
         <div className="grid">
-          <div className="[grid-area:1/1] transition-opacity duration-700" style={{ opacity: s.parser ? 0 : 1 }}>
+          <div className="xfade" style={{ opacity: s.parser ? 0 : 1 }} inert={!!s.parser}>
             <Code lines={tokens.colors[0]} fit={FIT.colors} reveal={s.reveal} focus={s.focus} max={28} vh="3.2svh" />
           </div>
-          <div
-            className="[grid-area:1/1] transition-opacity duration-700"
-            style={{ opacity: s.parser ? 1 : 0 }}
-            aria-hidden={!s.parser}
-          >
+          <div className="xfade" style={{ opacity: s.parser ? 1 : 0 }} inert={!s.parser}>
             <Code lines={tokens.colors[0]} fit={FIT.colors} variant="dark" max={28} vh="3.2svh" />
           </div>
         </div>
       </Pane>
-      <Pane label={`${rows.length} ${rows.length === 1 ? "color" : "colors"}`}>
+      <Pane label={`${rows.length} ${rows.length === 1 ? "color" : "colors"}`} className="pane-scroll">
         <Legend rows={rows} parser={!!s.parser} focus={s.focus} />
       </Pane>
     </div>
@@ -164,11 +183,11 @@ function ColorsWindow({ step }) {
 
 function LevelsWindow({ step }) {
   return (
-    <div className="panes h-full grid-rows-[auto_1fr] lg:grid-cols-[38fr_62fr] lg:grid-rows-1">
-      <Pane label="levels">
+    <div className="panes h-full grid-rows-[auto_minmax(0,1fr)] cols:grid-cols-[38fr_62fr] cols:grid-rows-1">
+      <Pane label="levels" className="pane-scroll">
         <Log steps={LEVEL_STEPS} step={step} />
       </Pane>
-      <Pane label="invoices.ts">
+      <Pane label="invoices.ts" className="pane-fill">
         <Code lines={tokens.levels[LEVEL_STEPS[step].frame]} fit={FIT.levels} />
       </Pane>
     </div>
@@ -176,17 +195,26 @@ function LevelsWindow({ step }) {
 }
 
 // The captions so far, newest in white. It grows as you scroll, like a log; on narrow
-// screens only the newest shows.
+// screens only the newest shows. Every caption is in the document from the start (the
+// ones not reached yet are sr-only), so the text does not depend on how far you scrolled.
+// A fade of `duration` seconds, or a cut for readers who asked for reduced motion (Motion's
+// own reducedMotion setting only drops movement; index.css cuts the CSS fades the same way).
+function useFade(duration) {
+  return { duration: useReducedMotion() ? 0 : duration };
+}
+
 function Log({ steps, step }) {
+  const fade = useFade(0.3);
   return (
-    <ol className="min-h-[3.25em] space-y-4 lg:space-y-6 text-base leading-relaxed lg:text-xl lg:leading-relaxed" aria-live="polite">
-      {steps.slice(0, step + 1).map((s, i) => (
+    <ol className="log">
+      {steps.map((s, i) => (
         <motion.li
           key={i}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: i === step ? 1 : 0.35, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className={i < step ? "hidden lg:block" : undefined}
+          initial={false}
+          animate={{ opacity: i === step ? 1 : i < step ? 0.55 : 0, y: i > step ? 6 : 0 }}
+          transition={fade}
+          className={i > step ? "sr-only" : i < step ? "max-lg:sr-only" : undefined}
+          aria-current={i === step ? "step" : undefined}
         >
           <Caption text={s.text} />
         </motion.li>
@@ -195,12 +223,12 @@ function Log({ steps, step }) {
   );
 }
 
-const CAPTION_COLOR = { r: "--neo-literal", y: "--neo-variable", b: "--neo-function", g: "--neo-gray4" };
+const CAPTION_COLOR = { r: "--neo-literal", y: "--neo-variable", b: "--neo-function" };
 
 function Caption({ text }) {
-  const parts = text.split(/(\[[rybg]:[^\]]+\])/).filter(Boolean);
+  const parts = text.split(/(\[[ryb]:[^\]]+\])/).filter(Boolean);
   return parts.map((p, i) => {
-    const m = p.match(/^\[([rybg]):([^\]]+)\]$/);
+    const m = p.match(/^\[([ryb]):([^\]]+)\]$/);
     return m ? (
       <span key={i} style={{ color: `var(${CAPTION_COLOR[m[1]]})` }}>
         {m[2]}
@@ -212,7 +240,8 @@ function Caption({ text }) {
 }
 
 // Every color on screen and the words wearing it. Ours: the revealed roles, then white
-// for everything else. Dark+: one row per color, labeled with the scope it came from.
+// for everything else. Dark+: one row per color, labeled with the theme rule that set it
+// (the one covering the most text; `more` counts the other rules landing on that color).
 function neoRows(lines, reveal) {
   const order = [...ALL_ROLES.filter((r) => reveal.includes(r)), "plain"];
   const words = Object.fromEntries(order.map((r) => [r, []]));
@@ -234,13 +263,16 @@ function darkRows() {
   return tokens.meta.dark.map((r) => ({
     key: r.color,
     color: r.color,
-    label: r.scope,
+    label: r.scopes[0],
+    more: r.scopes.slice(1),
     words: r.words,
-    plain: r.scope === "default",
+    plain: r.scopes[0] === "default",
   }));
 }
 
 function Legend({ rows, parser, focus }) {
+  const swap = useFade(0.25);
+  const fade = useFade(0.4);
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
@@ -248,8 +280,9 @@ function Legend({ rows, parser, focus }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="space-y-2.5 text-xs lg:space-y-3.5 lg:text-[13px]"
+        transition={swap}
+        className="legend"
+        style={{ "--label": Math.max(...rows.map((r) => r.label.length + (r.more?.length ? 3 : 0))) }}
       >
         <AnimatePresence initial={false}>
           {rows.map((r) => (
@@ -259,12 +292,15 @@ function Legend({ rows, parser, focus }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: focus === "plain" && !r.plain ? 0.22 : 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={fade}
               className="legend-row"
             >
               <span className="swatch" style={{ background: r.color }} />
-              <span className="text-(--neo-silver)">{r.label}</span>
-              <span className="hidden text-(--neo-gray4) sm:inline">{r.color}</span>
+              <span className="label text-(--neo-silver)" title={r.more?.length ? [r.label, ...r.more].join(", ") : undefined}>
+                {r.label}
+                {r.more?.length > 0 && <span className="text-(--neo-gray4)"> +{r.more.length}</span>}
+              </span>
+              <span className="hex text-(--neo-gray4)">{r.color}</span>
               <span className="words" style={{ color: r.color }}>
                 {r.words.join("  ")}
               </span>
@@ -381,7 +417,7 @@ function StatusLine({ current, progress }) {
         return (
           <a key={w} href={`#${w}`} aria-current={on ? "location" : undefined} data-on={on || undefined}>
             {i + 1}
-            <span className={on ? undefined : "hidden sm:inline"}>:{w}</span>
+            <span className={on ? undefined : "sr-only sm:not-sr-only"}>:{w}</span>
           </a>
         );
       })}

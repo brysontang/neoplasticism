@@ -29,7 +29,7 @@ console.log(\`Total: \${total}\`);`,
   const invoices = await fetchInvoices(account);
   const report = reconcile(invoices, account.ledger);
   for (const inv of report.overdue) {
-    const days = (Date.now() - inv.sentAt) / 86_400_000;
+    const days = age(inv.sentAt) / 86_400_000;
     if (days > 30 && inv.amountDue > 500) {
       inv.status = "escalated";
     } else if (days > 7) {
@@ -48,7 +48,7 @@ console.log(\`Total: \${total}\`);`,
 
 function flagOverdue(invoices: Invoice[]) {
   for (const inv of invoices) {
-    const days = (Date.now() - inv.sentAt) / 86_400_000;
+    const days = age(inv.sentAt) / 86_400_000;
     if (days > 30 && inv.amountDue > 500) {
       inv.status = "escalated";
     } else if (days > 7) {
@@ -63,8 +63,14 @@ function flagOverdue(invoices: Invoice[]) {
     lang: "lua",
     frames: [
       `-- Neovim, with lazy.nvim
-{ "brysontang/neoplasticism", lazy = false, priority = 1000 }
-vim.cmd.colorscheme("neoplasticism")`,
+{
+  "brysontang/neoplasticism",
+  lazy = false,
+  priority = 1000,
+  config = function()
+    vim.cmd.colorscheme("neoplasticism")
+  end,
+}`,
     ],
   },
 

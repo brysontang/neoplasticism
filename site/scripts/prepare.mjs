@@ -2,9 +2,15 @@
 // only place a color is written down. Runs before every dev/build.
 //
 //   ../dist/css/neoplasticism.css                     -> src/generated/palette.css
+//                                                         -> src/generated/palette.json
+//                                                            (roles, the five + OKLCH)
 //   ../dist/vscode/.../neoplasticism-color-theme.json -> tokenizes src/snippets.js
 //                                                         -> src/generated/tokens.json
+//   ../dist/vscode/extension/package.json             -> the version, in palette.json
 //   ../assets (logo, favicon, preview)                -> public/
+//
+// It also checks what the page takes for granted: the three roles and the foreground are
+// four different colors, and the theme colors the snippets with nothing else.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,16 +27,33 @@ fs.mkdirSync(PUBLIC, { recursive: true });
 // Palette: the CSS export, plus a color -> role map for classifying tokens.
 const css = fs.readFileSync(path.join(ROOT, "dist/css/neoplasticism.css"), "utf8");
 fs.writeFileSync(path.join(GEN, "palette.css"), css);
-const cssVar = (name) => {
-  const m = css.match(new RegExp(`--neo-${name}:\\s*(#[0-9a-fA-F]{6})`));
-  if (!m) throw new Error(`prepare: --neo-${name} not found in dist/css/neoplasticism.css`);
-  return m[1].toLowerCase();
+// Every color the page compares or does math on is #rrggbb, lowercase. #rgb is widened
+// and an opaque #rrggbbff loses its alpha; a color that really is translucent has no
+// place in a role table, so it fails here instead of being cut to its first six digits.
+const hex6 = (value, where) => {
+  const h = value.toLowerCase();
+  if (/^#[0-9a-f]{6}$/.test(h)) return h;
+  if (/^#[0-9a-f]{3}$/.test(h)) return `#${[...h.slice(1)].map((c) => c + c).join("")}`;
+  if (/^#[0-9a-f]{6}ff$/.test(h)) return h.slice(0, 7);
+  throw new Error(`prepare: ${where} is ${value}; expected an opaque #rrggbb color`);
 };
+const cssVar = (name) => {
+  const m = css.match(new RegExp(`--neo-${name}:\\s*([^;]+);`));
+  if (!m) throw new Error(`prepare: --neo-${name} not found in dist/css/neoplasticism.css`);
+  return hex6(m[1].trim(), `--neo-${name}`);
+};
+const FG = cssVar("fg");
 const ROLE_BY_COLOR = {
   [cssVar("literal")]: "literal",
   [cssVar("variable")]: "variable",
   [cssVar("function")]: "function",
 };
+// The page says "three colors, everything else white" and tells tokens apart by color.
+// If two roles share one, or a role is the foreground, that silently stops being true.
+if (Object.keys(ROLE_BY_COLOR).length !== 3 || FG in ROLE_BY_COLOR) {
+  const got = ["literal", "variable", "function", "fg"].map((r) => `${r} ${cssVar(r)}`).join(", ");
+  throw new Error(`prepare: literal, variable, function and fg must be four different colors (${got})`);
+}
 
 // Tokenize with the real theme (and Dark+ for the comparison).
 const theme = JSON.parse(
@@ -51,47 +74,97 @@ const lineKeys = (lines) => {
   });
 };
 
+// A token is one of the three roles or it is "plain", which the page draws in the
+// foreground color. So a token the theme colors with anything else (a gray comment, a
+// fourth hue) would show up white here and nobody would notice: fail instead.
+const role = (t, id) => {
+  const color = hex6(t.color ?? FG, `the color of "${t.content}" in snippet "${id}"`);
+  if (color in ROLE_BY_COLOR) return ROLE_BY_COLOR[color];
+  if (color === FG || !t.content.trim()) return "plain";
+  throw new Error(
+    `prepare: the theme colors "${t.content.trim()}" in snippet "${id}" ${color}, which is not literal, ` +
+      `variable, function or fg. The site only draws those four: give the color a role in ` +
+      `ROLE_BY_COLOR and a rule in src/index.css, or change the snippet.`,
+  );
+};
+
+// Dark+ is only shown for the `colors` snippet (the "colored for a compiler" step).
 const tokens = { meta: { darkBg: hl.getTheme("dark-plus").bg } };
 for (const [id, { lang, frames }] of Object.entries(snippets)) {
   tokens[id] = frames.map((code) => {
     const neo = hl.codeToTokensBase(code, { lang, theme: "neoplasticism" });
-    const dark = hl.codeToTokensBase(code, { lang, theme: "dark-plus" });
+    const dark = id === "colors" ? hl.codeToTokensBase(code, { lang, theme: "dark-plus" }) : null;
     return lineKeys(code.split("\n")).map((key, i) => ({
       key,
       neo: (neo[i] ?? []).map((t) => ({
         t: t.content,
-        r: ROLE_BY_COLOR[t.color?.toLowerCase()] ?? "plain",
+        r: role(t, id),
         ...(t.fontStyle & ITALIC ? { i: 1 } : {}),
       })),
-      dark: (dark[i] ?? []).map((t) => ({ t: t.content, c: t.color, ...(t.fontStyle & ITALIC ? { i: 1 } : {}) })),
+      ...(dark && {
+        dark: (dark[i] ?? []).map((t) => ({ t: t.content, c: t.color, ...(t.fontStyle & ITALIC ? { i: 1 } : {}) })),
+      }),
     }));
   });
 }
 // The compiler's view of the first snippet: every color Dark+ uses, labeled with the
-// TextMate scope it came from, so the page can show the parser's categories as data.
+// theme rule that produced it, so the page can show the parser's categories as data.
+//
+// The label is the rule's selector ("variable", "storage.type"), not the token's own
+// scope: `console` is variable.other.object and `total` is variable.other.readwrite, and
+// both are light blue because of the one rule for "variable". Several rules can land on
+// one color (`const` via storage.type, `${` via punctuation.definition.template-
+// expression.begin); the row lists them all, the one covering the most text first.
 {
   const { lang, frames } = snippets.colors;
   const darkTheme = hl.getTheme("dark-plus");
+  const darkFg = hex6(darkTheme.fg, "Dark+ foreground");
   const lines = hl.codeToTokensBase(frames[0], { lang, theme: "dark-plus", includeExplanation: true });
+
+  // Which selector colored this piece of text: walk its scopes innermost first, and at
+  // each take the most specific rule that sets this color (the way a TextMate theme
+  // resolves). null if no rule did, i.e. the text is the default foreground.
+  const selectorsOf = (rule) =>
+    [rule.scope ?? []].flat().flatMap((s) => s.split(",")).map((s) => s.trim()).filter(Boolean);
+  const ruleFor = (part, color) => {
+    for (const { scopeName, themeMatches } of part.scopes.toReversed()) {
+      const hits = (themeMatches ?? [])
+        .filter((rule) => rule.settings?.foreground && hex6(rule.settings.foreground, "a Dark+ rule") === color)
+        .flatMap(selectorsOf)
+        .filter((sel) => {
+          const last = sel.split(/\s+/).at(-1); // "a b" matches a `b` inside an `a`
+          return scopeName === last || scopeName.startsWith(`${last}.`);
+        })
+        .sort((a, b) => b.split(".").length - a.split(".").length || b.length - a.length);
+      if (hits.length) return hits[0];
+    }
+    return null;
+  };
+
   const rows = new Map();
   for (const t of lines.flat()) {
-    const color = t.color.toLowerCase();
+    const color = hex6(t.color, `the Dark+ color of "${t.content}"`);
     if (!rows.has(color)) rows.set(color, { color, scopes: new Map(), words: [] });
     const row = rows.get(color);
     for (const w of t.content.trim().split(/\s+/)) if (w && !row.words.includes(w)) row.words.push(w);
-    // Weigh each scope by how much text it covers: "variable.other.constant.ts" -> "variable.other.constant"
     for (const part of t.explanation ?? []) {
-      const scope = part.scopes.at(-1).scopeName.split(".").filter((s) => s !== lang).slice(0, 3).join(".");
-      row.scopes.set(scope, (row.scopes.get(scope) ?? 0) + part.content.trim().length);
+      const size = part.content.trim().length;
+      if (!size || color === darkFg) continue;
+      const selector = ruleFor(part, color);
+      if (!selector) {
+        const scope = part.scopes.at(-1).scopeName;
+        throw new Error(`prepare: no Dark+ rule explains ${color} on "${part.content.trim()}" (${scope})`);
+      }
+      row.scopes.set(selector, (row.scopes.get(selector) ?? 0) + size);
     }
   }
-  const isDefault = (r) => r.color === darkTheme.fg.toLowerCase();
+  const isDefault = (r) => r.color === darkFg;
   tokens.meta.dark = [...rows.values()]
     .filter((r) => r.words.length)
     .sort((a, b) => isDefault(a) - isDefault(b)) // default foreground last, like white in ours
     .map((r) => ({
       color: r.color,
-      scope: isDefault(r) ? "default" : [...r.scopes].sort((a, b) => b[1] - a[1])[0][0],
+      scopes: isDefault(r) ? ["default"] : [...r.scopes].sort((a, b) => b[1] - a[1]).map(([scope]) => scope),
       words: r.words,
     }));
 }
